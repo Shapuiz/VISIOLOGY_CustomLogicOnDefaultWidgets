@@ -2,41 +2,70 @@
 //Parameters:
 const tableColumnsToDraw = [0, 1, 2]; //Array of column numbers with data in which to draw a histogram (Starting from 0)
 const histogramColour = ["blue", "yellow", "green"] //Colors of the histogram in the table (HEX)
-const tableWidgetGUID = "85bf4cf106ee42828121fe78d5a5fcbd"; //Table GUID
 const maxHistogramWidth = 100; //Maximum width of the histogram as a percentage of the maximum cell width. Specified in % from 1 to 100.
 const minimalHistogramWidth = 5; //Minimum width of the histogram. This value will be applied for elements whose width is less than the number specified in this parameter.
 
+
+//Code block bellow (Do not change)!
+
+//Flat table widget render
+var dataGrid = OlapTableRender({
+    general: w.general,
+    pivotGridOptions: w.pivotGridOptions,
+    style: w.style,
+    errorState: w.errorState,
+    textFormatters: w.textFormatters
+ });
+
+ const tableWidgetGUID = w.general.renderTo;
+
+ //Calling drawing a histogram function then "onContentReady" worked successfully 
 visApi().onAllWidgetsLoadedListener({
     guid: (tableWidgetGUID + "_onAllWidgetsLoaded")
 }, function() {
     let targetTableOnList = $('div[id="' + tableWidgetGUID + '"]').length;
     if (targetTableOnList > 0) {
-        let tableWidgetApiCall = visApi().getWidgetByGuid(tableWidgetGUID);
-        drawHistogramOnTable(tableWidgetApiCall.widgetDataContainer.dataFrame.cols.length, tableWidgetApiCall.widgetDataContainer.dataFrame.rows.length);
-        $('div [id="' + tableWidgetGUID + '"]').find('div [id^=tableHistogramDiv]').animate({
-            opacity: 1 / 4
-        }, 1000);
+        //To draw on first load
+        changeDOM();
+        dataGrid.pivotGridInstance.option("onContentReady", function() {
+        changeDOM();
+        });
     }
 });
 
+//Modifies the DOM tree table by adding histogram elements 
+function changeDOM () {
+    let tableWidgetApiCall = visApi().getWidgetByGuid(tableWidgetGUID);
+    console.log("visApi",visApi().getWidgetByGuid(tableWidgetGUID))
+    console.log("tableWidgetGUID",tableWidgetGUID)
+    console.log("tableWidgetApiCall",tableWidgetApiCall)
+    drawHistogramOnTable(tableWidgetApiCall.widgetDataContainer.dataFrame.cols.length, tableWidgetApiCall.widgetDataContainer.dataFrame.rows.length);
+    $('div [id="' + tableWidgetGUID + '"]').find('div [id^=tableHistogramDiv]').animate({
+        opacity: 1 / 4
+    }, 800);
+}
+
 //Drawing a histogram
 function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
-    let lengthAllTableCells = $('div [id="' + tableWidgetGUID + '"]').find('td').children('span').length;
-    let startDrawingFromCell = lengthAllTableCells - (tableColumnsQuantity * tableRowsQuantity);
+    console.log('drawHistogramOnTable start')
+    $('div [id="' + tableWidgetGUID + '"]').find('div [id^=tableHistogramDiv]').remove();
+    let lengthAllTableCells = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded').length;
+    let startDrawingFromCell = 8 + tableColumnsQuantity;
 
     //Iterating through the array of required columns
     for (let columnIterator = 0; columnIterator < tableColumnsToDraw.length; columnIterator++) {
         let curColumnNumber = tableColumnsToDraw[columnIterator];
         let curColumnMaxValue = getcurColumnMaxValue(curColumnNumber, tableColumnsQuantity, lengthAllTableCells);
         for (let cellIterator = startDrawingFromCell + tableColumnsToDraw[columnIterator]; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
-            let curCell = $('div [id="' + tableWidgetGUID + '"]').find('td').children('span')[cellIterator];
-            let curCellValue = parseFloat($('div [id="' + tableWidgetGUID + '"]').find('td').children('span')[cellIterator].textContent.trim().replace(' ', ''));
+            let curCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
+            let curCellSpan = $(curCell).children('span')[0];
+            let curCellValue = parseFloat(curCellSpan.textContent.trim().replace(' ', ''));
             if (curCellValue > 0 && Object.is(curCellValue, NaN) === false) {
-                let curCellWidthValue = getDataColumnWidth(curCell);
+                let curCellWidthValue = getDataColumnWidth(curCellSpan);
                 let curCellHistogramWidth = getHistogramWidth(curCellValue, curColumnMaxValue, curCellWidthValue, maxHistogramWidth, minimalHistogramWidth);
-                let curCellHeight = getDataCellHeight(curCell);
+                let curCellHeight = getDataCellHeight(curCellSpan);
                 let div = addDivWithHistogramLine(curCellHistogramWidth, curCellHeight, columnIterator);
-                $(curCell).parent().prepend(div);
+                $(curCellSpan).parent().prepend(div);
             }
         }
     }
@@ -58,9 +87,11 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
         let thisValuesArray = [];
         let thisValue;
         let thisColumnMaxValue;
+        let thisItemCell;
 
         for (let cellIterator = startDrawingFromCell + thisColumnNumber; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
-            thisValue = parseFloat($('div [id="' + tableWidgetGUID + '"]').find('td').children('span')[cellIterator].textContent.trim().replace(' ', ''));
+            thisItemCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
+            thisValue = parseFloat($(thisItemCell).children('span')[0].textContent.trim().replace(' ', ''));
             if (Object.is(thisValue, NaN) === false) {
                 thisValuesArray.push(thisValue);
             }
@@ -97,4 +128,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
         return histogramLineDiv;
     }
 }
-//##############################################################################################
+
+//Render table
+dataGrid;
+//######################################################################################################

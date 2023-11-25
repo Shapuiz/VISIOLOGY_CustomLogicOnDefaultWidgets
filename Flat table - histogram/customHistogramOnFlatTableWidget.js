@@ -4,8 +4,10 @@ const tableColumnsToDraw = [2, 3]; //Array of table column numbers with data in 
 const maximumValuesTextWidgetGUIDs = ["b8459e0632084431b67e01c89d4184a9", "5f67ad64902c49ebb305c94cfae99de1"]; //Array of "Text" widget GUIDs with maximum column value
 const histogramColour = ["blue", "cyan"]; //Colors of the histogram in the table (HEX)
 const maxHistogramWidth = 100; //Maximum width of the histogram as a percentage of the maximum cell width. Specified in % from 1 to 100.
-const tableWidgetGUID = "a530bee9e532433c94f8d7eb2d73c640"; //Table GUID
 const minimalHistogramWidth = 5; //Minimum width of the histogram. This value will be applied for elements whose width is less than the number specified in this parameter.
+
+
+//Code block bellow (Do not change)!
 
 //Flat table widget render
 var dataGrid = DataGridRender({
@@ -15,6 +17,8 @@ var dataGrid = DataGridRender({
     textFormatters: w.textFormatters,
     style: w.style,
 });
+
+const tableWidgetGUID = w.general.renderTo;
 
 //Calling drawing a histogram function then "onContentReady" worked successfully 
 visApi().onAllWidgetsLoadedListener({
@@ -27,7 +31,7 @@ visApi().onAllWidgetsLoadedListener({
             drawHistogramOnTable(tableWidgetApiCall.widgetDataContainer.dataFrame.cols.length, tableWidgetApiCall.widgetDataContainer.dataFrame.rows.length);
             $('div [id="' + tableWidgetGUID + '"]').find('div [id^=tableHistogramDiv]').animate({
                 opacity: 1 / 4
-            }, 1000);
+            }, 800);
         });
     }
 });
@@ -98,3 +102,4 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
 
 //Render table
 dataGrid;
+//######################################################################################################
