@@ -46,7 +46,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
         let curColumnMaxValue = parseFloat($('div[id="' + maximumValuesTextWidgetGUIDs[columnIterator] + '"]').find('div')[0].textContent);
         for (let cellIterator = startDrawingFromCell + tableColumnsToDraw[columnIterator]; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
             let curCell = $('div [id="' + tableWidgetGUID + '"]').find('td')[cellIterator];
-            let curCellValue = parseFloat($('div [id="' + tableWidgetGUID + '"]').find('td')[cellIterator].textContent.trim().replace(' ', ''));
+            let curCellValue = parseFloat($('div [id="' + tableWidgetGUID + '"]').find('td')[cellIterator].textContent.trim().replace(/ /g, ""));
             if (curCellValue > 0 && Object.is(curCellValue, NaN) === false) {
                 let curCellWidthValue = getDataColumnWidth(curCell);
                 let curCellHeight = getDataCellHeight(curCell);

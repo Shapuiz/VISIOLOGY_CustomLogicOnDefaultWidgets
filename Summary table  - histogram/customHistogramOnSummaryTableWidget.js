@@ -59,7 +59,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
         for (let cellIterator = startDrawingFromCell + tableColumnsToDraw[columnIterator]; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
             let curCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
             let curCellSpan = $(curCell).children('span')[0];
-            let curCellValue = parseFloat(curCellSpan.textContent.trim().replace(' ', ''));
+            let curCellValue = parseFloat(curCellSpan.textContent.trim().replace(/ /g, ""));
             if (curCellValue > 0 && Object.is(curCellValue, NaN) === false) {
                 let curCellWidthValue = getDataColumnWidth(curCellSpan);
                 let curCellHistogramWidth = getHistogramWidth(curCellValue, curColumnMaxValue, curCellWidthValue, maxHistogramWidth, minimalHistogramWidth);
@@ -91,7 +91,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
 
         for (let cellIterator = startDrawingFromCell + thisColumnNumber; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
             thisItemCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
-            thisValue = parseFloat($(thisItemCell).children('span')[0].textContent.trim().replace(' ', ''));
+            thisValue = parseFloat($(thisItemCell).children('span')[0].textContent.trim().replace(/ /g, ""));
             if (Object.is(thisValue, NaN) === false) {
                 thisValuesArray.push(thisValue);
             }
