@@ -1,7 +1,7 @@
 //############################## Custom histogram on summary table widget ##############################
 //Parameters:
 const tableColumnsToDraw = [0, 1, 2]; //Array of column numbers with data in which to draw a histogram (Starting from 0)
-const histogramColour = ["blue", "yellow", "green"] //Colors of the histogram in the table (HEX)
+const histogramColour = ["darkblue", "orange", "green"] //Colors of the histogram in the table (HEX)
 const maxHistogramWidth = 100; //Maximum width of the histogram as a percentage of the maximum cell width. Specified in % from 1 to 100.
 const minimalHistogramWidth = 5; //Minimum width of the histogram. This value will be applied for elements whose width is less than the number specified in this parameter.
 
@@ -59,7 +59,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
         for (let cellIterator = startDrawingFromCell + tableColumnsToDraw[columnIterator]; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
             let curCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
             let curCellSpan = $(curCell).children('span')[0];
-            let curCellValue = parseFloat(curCellSpan.textContent.trim().replace(/ /g, ""));
+            let curCellValue = parseFloat(curCellSpan.textContent.trim().replace(' ', ''));
             if (curCellValue > 0 && Object.is(curCellValue, NaN) === false) {
                 let curCellWidthValue = getDataColumnWidth(curCellSpan);
                 let curCellHistogramWidth = getHistogramWidth(curCellValue, curColumnMaxValue, curCellWidthValue, maxHistogramWidth, minimalHistogramWidth);
@@ -91,7 +91,7 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
 
         for (let cellIterator = startDrawingFromCell + thisColumnNumber; cellIterator < lengthAllTableCells; cellIterator += tableColumnsQuantity) {
             thisItemCell = $('div [id="' + tableWidgetGUID + '"]').find('td').not('.dx-last-cell').not('.dx-pivotgrid-expanded')[cellIterator]
-            thisValue = parseFloat($(thisItemCell).children('span')[0].textContent.trim().replace(/ /g, ""));
+            thisValue = parseFloat($(thisItemCell).children('span')[0].textContent.trim().replace(' ', ''));
             if (Object.is(thisValue, NaN) === false) {
                 thisValuesArray.push(thisValue);
             }
@@ -123,7 +123,8 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
             "height": thisCellHeight,
             "width": thisCellHistogramWidth,
             "position": "absolute",
-            "opacity": "0%"
+            "opacity": "0%",
+            "border-radius": "3px"
         });
         return histogramLineDiv;
     }

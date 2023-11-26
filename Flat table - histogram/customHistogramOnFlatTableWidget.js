@@ -94,7 +94,8 @@ function drawHistogramOnTable(tableColumnsQuantity, tableRowsQuantity) {
             "height": thisCellHeight,
             "width": thisCellHistogramWidth,
             "position": "absolute",
-            "opacity": "0%"
+            "opacity": "0%",
+            "border-radius": "3px"
         });
         return histogramLineDiv;
     }
