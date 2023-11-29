@@ -4,7 +4,8 @@ RUS: Данный виджет добавляет на виджет гистог
 ENG: This widget adds another column to the histogram widget that shows the previous period.</br>
 </div>
 <h3>Инструкция/Instruction:</h3>
-![image](https://github.com/Shapuiz/VISIOLOGY_CustomLogicOnDefaultWidgets/assets/116454253/7b29b1fc-54fa-4c70-82e8-7930ac76f126)
+![image](https://github.com/Shapuiz/VISIOLOGY_CustomLogicOnDefaultWidgets/assets/116454253/2e8df289-ab4b-4329-b49b-bd162da476f0)
+
 </br>
 <div style="padding-left: 10px">
 RUS:</br>
