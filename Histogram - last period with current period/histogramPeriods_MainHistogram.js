@@ -4,6 +4,7 @@ const mainHistogramGUID = 'd959b23022ae4b12bb25e227fb6962be';
 const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
 const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
 const addPeriodFilterGUID = '799f3135b9f5429cbddc2fb318885f21';
+const mainPeriodFilterGUID = '7a324fcaa0054c03bdd621d54137418d';
 
 //Code block bellow (Do not change)
 
@@ -32,7 +33,9 @@ visApi().onAllWidgetsLoadedListener(
         let selectedValue;
         let result = [];
         let seriesIndex;
-        let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID);
+        let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
+        let mainPeriodFilterValue = visApi().getSelectedValues(mainPeriodFilterGUID)[0][0];
+        let isNeedToUpdateName = false;
 
         if (!selectedValues || selectedValues.length === 0 || selectedValues[0].length === 0) {
           render(result);
@@ -41,16 +44,29 @@ visApi().onAllWidgetsLoadedListener(
         selectedValue = selectedValues[0][0];
         seriesIndex = 0;
         w.series.forEach((item, index) => {
-          if (selectedValue === item.name) {
+          if (item.name.includes(selectedValue)) {
+            item.name === selectedValue ? (isNeedToUpdateName = true) : false;
+            console.log('isNeedToUpdateName', isNeedToUpdateName);
+            console.log('item.name', item.name);
             seriesIndex = index;
           }
         });
+
         result.push(w.series[seriesIndex]);
+        isNeedToUpdateName
+          ? (result[0].name = result[0].name + ' (' + mainPeriodFilterValue + ')')
+          : result[0].name;
+
         if (addPeriodFilterValue >= filterPeriodMinimalValue) {
           result.push(
             visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
           );
+          isNeedToUpdateName
+            ? (result[1].name = result[1].name + ' (' + addPeriodFilterValue + ')')
+            : result[1].name;
+          console.log('counter');
         }
+        console.log('result', result);
         render(result);
       },
     );
@@ -74,7 +90,8 @@ visApi().onAllWidgetsLoadedListener(
       let currentState = visApi().getSelectedValues(mainSeriesFilterGUID)[0][0];
       let seriesIndex = 0;
       let resultStart = [];
-      let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID);
+      let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
+      let mainPeriodFilterValue = visApi().getSelectedValues(mainPeriodFilterGUID)[0][0];
 
       w.series.forEach((item, index) => {
         if (currentState === item.name) {
@@ -82,10 +99,12 @@ visApi().onAllWidgetsLoadedListener(
         }
       });
       resultStart.push(w.series[seriesIndex]);
+      resultStart[0].name = resultStart[0].name + ' (' + mainPeriodFilterValue + ')';
       if (addPeriodFilterValue >= filterPeriodMinimalValue) {
         resultStart.push(
           visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
         );
+        resultStart[1].name = resultStart[1].name + ' (' + addPeriodFilterValue + ')';
       }
       return resultStart;
     }
@@ -94,3 +113,5 @@ visApi().onAllWidgetsLoadedListener(
     render(prepareData());
   },
 );
+
+console.log(w);
