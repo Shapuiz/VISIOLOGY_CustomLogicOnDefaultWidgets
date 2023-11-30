@@ -32,6 +32,13 @@ visApi().onAllWidgetsLoadedListener(
         let result = [];
         let seriesIndex;
         let isNeedToUpdateName = false;
+        let drawSecondSeries = false;
+        let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
+        addPeriodFilterSelectedValues.length > 0
+          ? addPeriodFilterSelectedValues[0].length > 0
+            ? (drawSecondSeries = true)
+            : (drawSecondSeries = false)
+          : (drawSecondSeries = false);
 
         if (!selectedValues || selectedValues.length === 0 || selectedValues[0].length === 0) {
           render(result);
@@ -48,10 +55,12 @@ visApi().onAllWidgetsLoadedListener(
 
         result.push(w.series[seriesIndex]);
         isNeedToUpdateName ? (result[0].name = result[0].name + ' (ТГ)') : result[0].name;
-
-        result.push(visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex]);
-        isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
-
+        if (drawSecondSeries) {
+          result.push(
+            visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
+          );
+          isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
+        }
         render(result);
       },
     );
@@ -76,6 +85,13 @@ visApi().onAllWidgetsLoadedListener(
       let seriesIndex = 0;
       let resultStart = [];
       let isNeedToUpdateName = false;
+      let drawSecondSeries = false;
+      let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
+      addPeriodFilterSelectedValues.length > 0
+        ? addPeriodFilterSelectedValues[0].length > 0
+          ? (drawSecondSeries = true)
+          : (drawSecondSeries = false)
+        : (drawSecondSeries = false);
 
       w.series.forEach((item, index) => {
         if (item.name.includes(currentState)) {
@@ -89,12 +105,14 @@ visApi().onAllWidgetsLoadedListener(
         ? (resultStart[0].name = resultStart[0].name + ' (ТГ)')
         : resultStart[0].name;
 
-      resultStart.push(
-        visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
-      );
-      isNeedToUpdateName
-        ? (resultStart[1].name = resultStart[1].name + ' (ПГ)')
-        : resultStart[1].name;
+      if (drawSecondSeries) {
+        resultStart.push(
+          visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
+        );
+        isNeedToUpdateName
+          ? (resultStart[1].name = resultStart[1].name + ' (ПГ)')
+          : resultStart[1].name;
+      }
       return resultStart;
     }
 
