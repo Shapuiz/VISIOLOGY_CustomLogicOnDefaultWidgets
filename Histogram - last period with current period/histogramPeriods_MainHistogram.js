@@ -4,7 +4,6 @@ const mainHistogramGUID = 'd959b23022ae4b12bb25e227fb6962be';
 const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
 const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
 const addPeriodFilterGUID = '799f3135b9f5429cbddc2fb318885f21';
-const mainPeriodFilterGUID = '7a324fcaa0054c03bdd621d54137418d';
 
 //Code block bellow (Do not change)
 
