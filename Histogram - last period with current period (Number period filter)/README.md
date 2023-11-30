@@ -1,6 +1,6 @@
 <h3>Описание/Description:</h3></br>
-RUS: Данный виджет добавляет на виджет гистограммы еще один столбец который показывает предыдущий период.</br>
-ENG: This widget adds another column to the histogram widget that shows the previous period.</br>
+RUS: Данный виджет добавляет на виджет гистограммы еще один столбец который показывает предыдущий период (Фильтры обычные,целое число).</br>
+ENG: This widget adds another column to the histogram widget that shows the previous period (Normal filters, integer).</br>
 <h3>Инструкция/Instruction:</h3>
 
 ![image](https://github.com/Shapuiz/VISIOLOGY_CustomLogicOnDefaultWidgets/assets/116454253/71d8d9d2-4275-4c96-92a9-1fe275b8b504)
