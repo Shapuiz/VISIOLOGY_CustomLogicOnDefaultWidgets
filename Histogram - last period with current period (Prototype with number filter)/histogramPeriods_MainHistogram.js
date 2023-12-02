@@ -1,8 +1,9 @@
 //Parameters
+const filterPeriodMinimalValue = 1;
 const mainHistogramGUID = 'd959b23022ae4b12bb25e227fb6962be';
 const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
 const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
-const mainPeriodFilterGUID = '972890be0ea44e26b567b16c132e1ed4';
+const addPeriodFilterGUID = '799f3135b9f5429cbddc2fb318885f21';
 
 //Code block bellow (Do not change)
 
@@ -31,14 +32,8 @@ visApi().onAllWidgetsLoadedListener(
         let selectedValue;
         let result = [];
         let seriesIndex;
+        let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
         let isNeedToUpdateName = false;
-        let drawSecondSeries = false;
-        let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
-        addPeriodFilterSelectedValues.length > 0
-          ? addPeriodFilterSelectedValues[0].length > 0
-            ? (drawSecondSeries = true)
-            : (drawSecondSeries = false)
-          : (drawSecondSeries = false);
 
         if (!selectedValues || selectedValues.length === 0 || selectedValues[0].length === 0) {
           render(result);
@@ -49,18 +44,23 @@ visApi().onAllWidgetsLoadedListener(
         w.series.forEach((item, index) => {
           if (item.name.includes(selectedValue)) {
             item.name === selectedValue ? (isNeedToUpdateName = true) : false;
+            console.log('isNeedToUpdateName', isNeedToUpdateName);
+            console.log('item.name', item.name);
             seriesIndex = index;
           }
         });
 
         result.push(w.series[seriesIndex]);
         isNeedToUpdateName ? (result[0].name = result[0].name + ' (ТГ)') : result[0].name;
-        if (drawSecondSeries) {
+
+        if (addPeriodFilterValue >= filterPeriodMinimalValue) {
           result.push(
             visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
           );
           isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
+          console.log('counter');
         }
+        console.log('result', result);
         render(result);
       },
     );
@@ -84,14 +84,8 @@ visApi().onAllWidgetsLoadedListener(
       let currentState = visApi().getSelectedValues(mainSeriesFilterGUID)[0][0];
       let seriesIndex = 0;
       let resultStart = [];
+      let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
       let isNeedToUpdateName = false;
-      let drawSecondSeries = false;
-      let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
-      addPeriodFilterSelectedValues.length > 0
-        ? addPeriodFilterSelectedValues[0].length > 0
-          ? (drawSecondSeries = true)
-          : (drawSecondSeries = false)
-        : (drawSecondSeries = false);
 
       w.series.forEach((item, index) => {
         if (item.name.includes(currentState)) {
@@ -104,8 +98,7 @@ visApi().onAllWidgetsLoadedListener(
       isNeedToUpdateName
         ? (resultStart[0].name = resultStart[0].name + ' (ТГ)')
         : resultStart[0].name;
-
-      if (drawSecondSeries) {
+      if (addPeriodFilterValue >= filterPeriodMinimalValue) {
         resultStart.push(
           visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
         );
@@ -120,3 +113,5 @@ visApi().onAllWidgetsLoadedListener(
     render(prepareData());
   },
 );
+
+console.log(w);

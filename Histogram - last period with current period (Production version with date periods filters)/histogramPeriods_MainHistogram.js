@@ -1,9 +1,8 @@
 //Parameters
-const filterPeriodMinimalValue = 1;
 const mainHistogramGUID = 'd959b23022ae4b12bb25e227fb6962be';
 const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
 const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
-const addPeriodFilterGUID = '799f3135b9f5429cbddc2fb318885f21';
+const mainPeriodFilterGUID = '972890be0ea44e26b567b16c132e1ed4';
 
 //Code block bellow (Do not change)
 
@@ -32,8 +31,17 @@ visApi().onAllWidgetsLoadedListener(
         let selectedValue;
         let result = [];
         let seriesIndex;
-        let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
         let isNeedToUpdateName = false;
+        let drawSecondSeries = false;
+        let addHistogramIsNotBlank = $('i[title*="3d14c443079a4cc8a6b7a2b5762e940f"]')[0].title;
+        let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
+        addPeriodFilterSelectedValues.length > 0
+          ? addPeriodFilterSelectedValues[0].length > 0
+            ? addHistogramIsNotBlank == undefined
+              ? (drawSecondSeries = true)
+              : (drawSecondSeries = false)
+            : (drawSecondSeries = false)
+          : (drawSecondSeries = false);
 
         if (!selectedValues || selectedValues.length === 0 || selectedValues[0].length === 0) {
           render(result);
@@ -44,23 +52,18 @@ visApi().onAllWidgetsLoadedListener(
         w.series.forEach((item, index) => {
           if (item.name.includes(selectedValue)) {
             item.name === selectedValue ? (isNeedToUpdateName = true) : false;
-            console.log('isNeedToUpdateName', isNeedToUpdateName);
-            console.log('item.name', item.name);
             seriesIndex = index;
           }
         });
 
         result.push(w.series[seriesIndex]);
         isNeedToUpdateName ? (result[0].name = result[0].name + ' (ТГ)') : result[0].name;
-
-        if (addPeriodFilterValue >= filterPeriodMinimalValue) {
+        if (drawSecondSeries) {
           result.push(
             visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
           );
           isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
-          console.log('counter');
         }
-        console.log('result', result);
         render(result);
       },
     );
@@ -84,20 +87,37 @@ visApi().onAllWidgetsLoadedListener(
       let currentState = visApi().getSelectedValues(mainSeriesFilterGUID)[0][0];
       let seriesIndex = 0;
       let resultStart = [];
-      let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
+      let isNeedToUpdateName = false;
+      let drawSecondSeries = false;
+      let addHistogramIsNotBlank = $('i[title*="3d14c443079a4cc8a6b7a2b5762e940f"]')[0].title;
+      let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
+      addPeriodFilterSelectedValues.length > 0
+        ? addPeriodFilterSelectedValues[0].length > 0
+          ? addHistogramIsNotBlank == undefined
+            ? (drawSecondSeries = true)
+            : (drawSecondSeries = false)
+          : (drawSecondSeries = false)
+        : (drawSecondSeries = false);
 
       w.series.forEach((item, index) => {
-        if (currentState === item.name) {
+        if (item.name.includes(currentState)) {
+          isNeedToUpdateName = true;
           seriesIndex = index;
         }
       });
+
       resultStart.push(w.series[seriesIndex]);
-      resultStart[0].name = resultStart[0].name + ' (ТГ)';
-      if (addPeriodFilterValue >= filterPeriodMinimalValue) {
+      isNeedToUpdateName
+        ? (resultStart[0].name = resultStart[0].name + ' (ТГ)')
+        : resultStart[0].name;
+
+      if (drawSecondSeries) {
         resultStart.push(
           visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
         );
-        resultStart[1].name = resultStart[1].name + ' (ПГ)';
+        isNeedToUpdateName
+          ? (resultStart[1].name = resultStart[1].name + ' (ПГ)')
+          : resultStart[1].name;
       }
       return resultStart;
     }
@@ -106,5 +126,3 @@ visApi().onAllWidgetsLoadedListener(
     render(prepareData());
   },
 );
-
-console.log(w);
