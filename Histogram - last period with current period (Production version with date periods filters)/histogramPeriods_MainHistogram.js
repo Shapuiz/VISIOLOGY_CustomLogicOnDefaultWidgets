@@ -33,7 +33,7 @@ visApi().onAllWidgetsLoadedListener(
         let seriesIndex;
         let isNeedToUpdateName = false;
         let drawSecondSeries = false;
-        let addHistogramIsNotBlank = $('i[title*="3d14c443079a4cc8a6b7a2b5762e940f"]')[0].title;
+        let addHistogramIsNotBlank = $('i[title*="' + addHistogramGUID + '"]')[0].title;
         let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
         addPeriodFilterSelectedValues.length > 0
           ? addPeriodFilterSelectedValues[0].length > 0
@@ -89,7 +89,7 @@ visApi().onAllWidgetsLoadedListener(
       let resultStart = [];
       let isNeedToUpdateName = false;
       let drawSecondSeries = false;
-      let addHistogramIsNotBlank = $('i[title*="3d14c443079a4cc8a6b7a2b5762e940f"]')[0].title;
+      let addHistogramIsNotBlank = $('i[title*="' + addHistogramGUID + '"]')[0].title;
       let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
       addPeriodFilterSelectedValues.length > 0
         ? addPeriodFilterSelectedValues[0].length > 0
