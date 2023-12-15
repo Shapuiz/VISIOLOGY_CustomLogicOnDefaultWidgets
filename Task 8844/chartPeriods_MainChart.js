@@ -1,24 +1,24 @@
 //Parameters
-const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
-const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
-const mainPeriodFilterGUID = '972890be0ea44e26b567b16c132e1ed4';
+const addChartGUID = '0a8570d7b83f4419b76542ba4826c33b';
+const mainSeriesFilterGUID = 'edd2c24744e148eb981d5ca138b80cc9';
+const mainPeriodFilterGUID = 'b36c7848c5c84894b33078205bb66e55';
 
 //Code block bellow (Do not change)
-const mainHistogramGUID = w.general.renderTo;
+const mainChartGUID = w.general.renderTo;
 //Draw on series filter change
 visApi().onAllWidgetsLoadedListener(
   {
-    guid: mainHistogramGUID + '_AllWidgetsLoaded',
+    guid: mainChartGUID + '_AllWidgetsLoaded',
   },
   function () {
     //Check main chart on list
     if (visApi().getWidgetByGuid(mainChartGUID) !== undefined) {
-      let addHistogramNumberFromAllWidgets;
+      let addChartNumberFromAllWidgets;
       visApi()
         .getWidgets()
         .forEach((item, index) => {
-          if (item.w.general.renderTo === addHistogramGUID) {
-            addHistogramNumberFromAllWidgets = index;
+          if (item.w.general.renderTo === addChartGUID) {
+            addChartNumberFromAllWidgets = index;
           }
         });
 
@@ -55,18 +55,20 @@ visApi().onAllWidgetsLoadedListener(
           });
 
           result.push(w.series[seriesIndex]);
-          isNeedToUpdateName ? (result[0].name = result[0].name + ' (ТГ)') : result[0].name;
+          isNeedToUpdateName
+            ? (result[0].name = result[0].name + ' (Текущая неделя)')
+            : result[0].name;
           if (drawSecondSeries) {
-            result.push(
-              visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
-            );
-            isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
+            result.push(visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex]);
+            isNeedToUpdateName
+              ? (result[1].name = result[1].name + ' (Прошлая неделя)')
+              : result[1].name;
           }
           render(result);
         },
       );
 
-      //Standart render of histogram
+      //Standart render of chart
       function render(series) {
         Highcharts.chart({
           chart: w.general,
@@ -103,15 +105,15 @@ visApi().onAllWidgetsLoadedListener(
 
         resultStart.push(w.series[seriesIndex]);
         isNeedToUpdateName
-          ? (resultStart[0].name = resultStart[0].name + ' (ТГ)')
+          ? (resultStart[0].name = resultStart[0].name + ' (Текущая неделя)')
           : resultStart[0].name;
 
         if (drawSecondSeries) {
           resultStart.push(
-            visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
+            visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex],
           );
           isNeedToUpdateName
-            ? (resultStart[1].name = resultStart[1].name + ' (ПГ)')
+            ? (resultStart[1].name = resultStart[1].name + ' (Прошлая неделя)')
             : resultStart[1].name;
         }
         return resultStart;
