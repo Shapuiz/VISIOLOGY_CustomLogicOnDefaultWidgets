@@ -53,12 +53,11 @@ visApi().onAllWidgetsLoadedListener(
               seriesIndex = index;
             }
           });
-
-          result.push(w.series[seriesIndex]);
-          isNeedToUpdateName
-            ? (result[0].name = result[0].name + ' (Текущая неделя)')
-            : result[0].name;
           if (drawSecondSeries) {
+            result.push(w.series[seriesIndex]);
+            isNeedToUpdateName
+              ? (result[0].name = result[0].name + ' (Текущая неделя)')
+              : result[0].name;
             result.push(visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex]);
             isNeedToUpdateName
               ? (result[1].name = result[1].name + ' (Прошлая неделя)')
