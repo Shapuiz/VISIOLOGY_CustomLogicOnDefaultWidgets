@@ -1,24 +1,24 @@
 //Parameters
-const addChartGUID = '0a8570d7b83f4419b76542ba4826c33b';
-const mainSeriesFilterGUID = 'edd2c24744e148eb981d5ca138b80cc9';
-const mainPeriodFilterGUID = 'b36c7848c5c84894b33078205bb66e55';
+const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
+const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
+const mainPeriodFilterGUID = '972890be0ea44e26b567b16c132e1ed4';
 
 //Code block bellow (Do not change)
-const mainChartGUID = w.general.renderTo;
+const mainHistogramGUID = w.general.renderTo;
 //Draw on series filter change
 visApi().onAllWidgetsLoadedListener(
   {
-    guid: mainChartGUID + '_AllWidgetsLoaded',
+    guid: mainHistogramGUID + '_AllWidgetsLoaded',
   },
   function () {
     //Check main chart on list
     if (visApi().getWidgetByGuid(mainChartGUID) !== undefined) {
-      let addChartNumberFromAllWidgets;
+      let addHistogramNumberFromAllWidgets;
       visApi()
         .getWidgets()
         .forEach((item, index) => {
-          if (item.w.general.renderTo === addChartGUID) {
-            addChartNumberFromAllWidgets = index;
+          if (item.w.general.renderTo === addHistogramGUID) {
+            addHistogramNumberFromAllWidgets = index;
           }
         });
 
@@ -32,7 +32,6 @@ visApi().onAllWidgetsLoadedListener(
           let selectedValue;
           let result = [];
           let seriesIndex;
-          let isNeedToUpdateName = false;
           let drawSecondSeries = false;
           let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
           addPeriodFilterSelectedValues.length > 0
@@ -49,25 +48,21 @@ visApi().onAllWidgetsLoadedListener(
           seriesIndex = 0;
           w.series.forEach((item, index) => {
             if (item.name.includes(selectedValue)) {
-              item.name === selectedValue ? (isNeedToUpdateName = true) : false;
               seriesIndex = index;
             }
           });
+
+          result.push(w.series[seriesIndex]);
           if (drawSecondSeries) {
-            result.push(w.series[seriesIndex]);
-            isNeedToUpdateName
-              ? (result[0].name = result[0].name + ' (Текущая неделя)')
-              : result[0].name;
-            result.push(visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex]);
-            isNeedToUpdateName
-              ? (result[1].name = result[1].name + ' (Прошлая неделя)')
-              : result[1].name;
+            result.push(
+              visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
+            );
           }
           render(result);
         },
       );
 
-      //Standart render of chart
+      //Standart render of histogram
       function render(series) {
         Highcharts.chart({
           chart: w.general,
@@ -86,7 +81,6 @@ visApi().onAllWidgetsLoadedListener(
         let currentState = visApi().getSelectedValues(mainSeriesFilterGUID)[0][0];
         let seriesIndex = 0;
         let resultStart = [];
-        let isNeedToUpdateName = false;
         let drawSecondSeries = false;
         let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
         addPeriodFilterSelectedValues.length > 0
@@ -97,22 +91,15 @@ visApi().onAllWidgetsLoadedListener(
 
         w.series.forEach((item, index) => {
           if (item.name.includes(currentState)) {
-            isNeedToUpdateName = true;
             seriesIndex = index;
           }
         });
 
+        resultStart.push(w.series[seriesIndex]);
         if (drawSecondSeries) {
-          resultStart.push(w.series[seriesIndex]);
-          isNeedToUpdateName
-            ? (resultStart[0].name = resultStart[0].name + ' (Текущая неделя)')
-            : resultStart[0].name;
           resultStart.push(
-            visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex],
+            visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
           );
-          isNeedToUpdateName
-            ? (resultStart[1].name = resultStart[1].name + ' (Прошлая неделя)')
-            : resultStart[1].name;
         }
         return resultStart;
       }

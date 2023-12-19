@@ -32,7 +32,6 @@ visApi().onAllWidgetsLoadedListener(
           let selectedValue;
           let result = [];
           let seriesIndex;
-          let isNeedToUpdateName = false;
           let drawSecondSeries = false;
           let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
           addPeriodFilterSelectedValues.length > 0
@@ -49,20 +48,13 @@ visApi().onAllWidgetsLoadedListener(
           seriesIndex = 0;
           w.series.forEach((item, index) => {
             if (item.name.includes(selectedValue)) {
-              item.name === selectedValue ? (isNeedToUpdateName = true) : false;
               seriesIndex = index;
             }
           });
 
           result.push(w.series[seriesIndex]);
-          isNeedToUpdateName
-            ? (result[0].name = result[0].name + ' (Текущая неделя)')
-            : result[0].name;
           if (drawSecondSeries) {
             result.push(visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex]);
-            isNeedToUpdateName
-              ? (result[1].name = result[1].name + ' (Прошлая неделя)')
-              : result[1].name;
           }
           render(result);
         },
@@ -87,7 +79,6 @@ visApi().onAllWidgetsLoadedListener(
         let currentState = visApi().getSelectedValues(mainSeriesFilterGUID)[0][0];
         let seriesIndex = 0;
         let resultStart = [];
-        let isNeedToUpdateName = false;
         let drawSecondSeries = false;
         let addPeriodFilterSelectedValues = visApi().getSelectedValues(mainPeriodFilterGUID);
         addPeriodFilterSelectedValues.length > 0
@@ -98,23 +89,14 @@ visApi().onAllWidgetsLoadedListener(
 
         w.series.forEach((item, index) => {
           if (item.name.includes(currentState)) {
-            isNeedToUpdateName = true;
             seriesIndex = index;
           }
         });
-
         resultStart.push(w.series[seriesIndex]);
-        isNeedToUpdateName
-          ? (resultStart[0].name = resultStart[0].name + ' (Текущая неделя)')
-          : resultStart[0].name;
-
         if (drawSecondSeries) {
           resultStart.push(
             visApi().getWidgets()[addChartNumberFromAllWidgets].w.series[seriesIndex],
           );
-          isNeedToUpdateName
-            ? (resultStart[1].name = resultStart[1].name + ' (Прошлая неделя)')
-            : resultStart[1].name;
         }
         return resultStart;
       }

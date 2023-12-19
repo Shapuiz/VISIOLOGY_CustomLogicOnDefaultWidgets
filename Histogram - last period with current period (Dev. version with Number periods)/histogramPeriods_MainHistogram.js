@@ -33,8 +33,6 @@ visApi().onAllWidgetsLoadedListener(
         let result = [];
         let seriesIndex;
         let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
-        let isNeedToUpdateName = false;
-
         if (!selectedValues || selectedValues.length === 0 || selectedValues[0].length === 0) {
           render(result);
           return;
@@ -43,24 +41,15 @@ visApi().onAllWidgetsLoadedListener(
         seriesIndex = 0;
         w.series.forEach((item, index) => {
           if (item.name.includes(selectedValue)) {
-            item.name === selectedValue ? (isNeedToUpdateName = true) : false;
-            console.log('isNeedToUpdateName', isNeedToUpdateName);
-            console.log('item.name', item.name);
             seriesIndex = index;
           }
         });
-
         result.push(w.series[seriesIndex]);
-        isNeedToUpdateName ? (result[0].name = result[0].name + ' (ТГ)') : result[0].name;
-
         if (addPeriodFilterValue >= filterPeriodMinimalValue) {
           result.push(
             visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
           );
-          isNeedToUpdateName ? (result[1].name = result[1].name + ' (ПГ)') : result[1].name;
-          console.log('counter');
         }
-        console.log('result', result);
         render(result);
       },
     );
@@ -85,26 +74,16 @@ visApi().onAllWidgetsLoadedListener(
       let seriesIndex = 0;
       let resultStart = [];
       let addPeriodFilterValue = visApi().getSelectedValues(addPeriodFilterGUID)[0][0];
-      let isNeedToUpdateName = false;
-
       w.series.forEach((item, index) => {
         if (item.name.includes(currentState)) {
-          isNeedToUpdateName = true;
           seriesIndex = index;
         }
       });
-
       resultStart.push(w.series[seriesIndex]);
-      isNeedToUpdateName
-        ? (resultStart[0].name = resultStart[0].name + ' (ТГ)')
-        : resultStart[0].name;
       if (addPeriodFilterValue >= filterPeriodMinimalValue) {
         resultStart.push(
           visApi().getWidgets()[addHistogramNumberFromAllWidgets].w.series[seriesIndex],
         );
-        isNeedToUpdateName
-          ? (resultStart[1].name = resultStart[1].name + ' (ПГ)')
-          : resultStart[1].name;
       }
       return resultStart;
     }
