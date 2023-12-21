@@ -11,8 +11,8 @@ visApi().onAllWidgetsLoadedListener(
     guid: mainHistogramGUID + '_AllWidgetsLoaded',
   },
   function () {
-    //Check main chart on list
-    if (visApi().getWidgetByGuid(mainChartGUID) !== undefined) {
+    //Check main histogram on list
+    if (visApi().getWidgetByGuid(mainHistogramGUID) !== undefined) {
       let addHistogramNumberFromAllWidgets;
       visApi()
         .getWidgets()
