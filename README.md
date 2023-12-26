@@ -3,17 +3,17 @@
 Каждая папка данного репозитория содержит отдельную задачу.
 Описание развертования каждой отдельной задачи находится внутри папки с задачей, в файле **ReadMe**.
 
-- **Summary table - detalization page**
+- **Summary table - detalization page** <br>
 Переход к странице с детализацией при клике на последний элемент DrillDown по строкам для сводной таблицы.
-- **Summary table - histogram**
+- **Summary table - histogram** <br>
 Добавляет гистограмму к столбцам сводной таблицы согласно настройкам, основываясь на максимальном значении столбца и текущем значении ячейки.
-- **Histogram - last period with current period (Dev. version with Number periods)**
+- **Histogram - last period with current period (Dev. version with Number periods)** <br>
 Добавляет вторую гистограмму рядом с основной (Через series) из дополнительного виджета. Для отображения текущего и прошлого периода. Dev версия, период в формате чисел (для кварталов).
-- **Histogram - last period with current period (Date periods)**
+- **Histogram - last period with current period (Date periods)** <br>
 Добавляет вторую гистограмму рядом с основной (Через series) из дополнительного виджета. Для отображения текущего и прошлого периода. Продуктовая версия, период в формате диапозонов дат.
-- **Flat table - histogram**
+- **Flat table - histogram** <br>
 Добавляет гистограмму к столбцам плоской таблицы согласно настройкам, основываясь на максимальном значении столбца и текущем значении ячейки.
-- **(8844) Chart - last period with current period (Date periods)**
+- **(8844) Chart - last period with current period (Date periods)** <br>
 Выполняет отрисовку дополнительного графика рядом с основным (через series) из дополнительного виджета. Для отображения текущего и прошлого периода.Продуктовая версия, период в формате диапозонов дат. Реализовано в рамках задачи 8844.
-- **(8844) Chart - last period with current period (Date periods, without draw on null filters)**
+- **(8844) Chart - last period with current period (Date periods, without draw on null filters)** <br>
  Выполняет отрисовку дополнительного графика рядом с основным (через series) из дополнительного виджета. Для отображения текущего и прошлого периода.Продуктовая версия, период в формате диапозонов дат. Добавлено отсутствие отрисовки графиков при пустых фильтрах с датой. Реализовано в рамках задачи 8844.
