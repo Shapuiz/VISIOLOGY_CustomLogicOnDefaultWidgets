@@ -28,7 +28,6 @@ olapTableRender.pivotGridInstance.option('onContentReady', function (event) {
   //Add new event listeners
   lastDrilldownLevelCells.on('click', function (info) {
     let currentTargetElementValue = $($(info.currentTarget).children('span')[0]).text();
-    console.warn(currentTargetElementValue);
     visApi().setFilterSelectedValues(detailPageFilterGUID, [[currentTargetElementValue]]);
     $('button')[detailPageID].click();
   });
