@@ -12,7 +12,8 @@ let olapTableRender = OlapTableRender({
   textFormatters: w.textFormatters,
 });
 
-olapTableRender.pivotGridInstance.option('onContentReady', function () {
+let oldOnContentReady = olapTableRender.pivotGridInstance.option('onContentReady');
+olapTableRender.pivotGridInstance.option('onContentReady', function (event) {
   let lastDrilldownLevelCells = $('div [id="' + mainTableGUID + '"]')
     .find('.dx-last-cell')
     .not('.dx-pivotgrid-collapsed');
@@ -31,5 +32,6 @@ olapTableRender.pivotGridInstance.option('onContentReady', function () {
     visApi().setFilterSelectedValues(detailPageFilterGUID, [[currentTargetElementValue]]);
     $('button')[detailPageID].click();
   });
+  oldOnContentReady(event);
 });
 olapTableRender; //эта строчка всегда должна оставаться последней
