@@ -61,6 +61,15 @@ visApi().onAllWidgetsLoadedListener(
 
       //Standart render of chart
       function render(series) {
+        let xAxisDeepClone = structuredClone(w.xAxis);
+        xAxisDeepClone.categories = [
+          ...new Set(
+            xAxisDeepClone.categories.concat(
+              visApi().getWidgetByGuid(addChartGUID).w.xAxis.categories,
+            ),
+          ),
+        ].sort();
+
         Highcharts.chart({
           chart: w.general,
           xAxis: w.xAxis,

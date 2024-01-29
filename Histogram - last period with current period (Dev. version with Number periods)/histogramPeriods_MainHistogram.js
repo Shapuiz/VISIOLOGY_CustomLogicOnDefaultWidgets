@@ -1,12 +1,11 @@
 //Parameters
 const filterPeriodMinimalValue = 1;
-const mainHistogramGUID = 'd959b23022ae4b12bb25e227fb6962be';
 const addHistogramGUID = '3d14c443079a4cc8a6b7a2b5762e940f';
 const mainSeriesFilterGUID = 'b2e2fec4563a48778b4fc3cb5f9db01d';
 const addPeriodFilterGUID = '799f3135b9f5429cbddc2fb318885f21';
 
 //Code block bellow (Do not change)
-
+const mainHistogramGUID = w.general.renderTo;
 //Draw on series filter change
 visApi().onAllWidgetsLoadedListener(
   {
@@ -56,6 +55,15 @@ visApi().onAllWidgetsLoadedListener(
 
     //Standart render of histogram
     function render(series) {
+      let xAxisDeepClone = structuredClone(w.xAxis);
+      xAxisDeepClone.categories = [
+        ...new Set(
+          xAxisDeepClone.categories.concat(
+            visApi().getWidgetByGuid(addHistogramGUID).w.xAxis.categories,
+          ),
+        ),
+      ].sort();
+
       Highcharts.chart({
         chart: w.general,
         xAxis: w.xAxis,
